@@ -8,11 +8,10 @@ from sentence_transformers import SentenceTransformer
 
 st.set_page_config(
     page_title="Lightweight AI Learning Assistant",
-    layout="wide",
-    page_icon="📘"
+    layout="wide"
 )
 
-st.title("📘 Smart Learning Assistant")
+st.title("Smart Learning Assistant")
 st.markdown("Upload study material and get structured explanations instantly.")
 
 @st.cache_resource
@@ -91,23 +90,23 @@ def format_answer(query, context):
         )
 
     formatted = f"""
-## 📘 Definition
+## Definition
 {definition}
 
-## ✨ Key Points
+## Key Points
 """
     for point in key_points:
         formatted += f"- {point}\n"
 
     formatted += f"""
-## 📌 Explanation
+## Explanation
 {explanation}
 
-## 🎓 Exam Insight
+## Exam Insight
 Understanding this topic is important for conceptual clarity and exam-based questions.
 """
     return formatted
-uploaded_file = st.file_uploader("📄 Upload PDF", type=["pdf"])
+uploaded_file = st.file_uploader("Upload PDF", type=["pdf"])
 
 if uploaded_file:
 
@@ -141,15 +140,15 @@ if uploaded_file:
             st.session_state.chunks = chunks
             st.session_state.vector_ready = True
 
-        st.success("✅ Document indexed successfully!")
+        st.success("--> Document indexed successfully!")
 
     st.divider()
 
-    query = st.text_input("💬 Ask a question about the document")
+    query = st.text_input("Ask any question about the document")
 
     if st.button("Generate Answer") and query:
 
-        with st.spinner("📖 Generating structured explanation..."):
+        with st.spinner("Generating structured explanation..."):
             context = retrieve_context(query)
             answer = format_answer(query, context)
 
