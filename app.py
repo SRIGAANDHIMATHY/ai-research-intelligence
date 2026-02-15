@@ -15,7 +15,7 @@ st.set_page_config(
     page_icon="📘"
 )
 
-st.title("📘 Smart Learning Assistant (No AI Model Required)")
+st.title("📘 Smart Learning Assistant")
 st.markdown("Upload study material and get structured explanations instantly.")
 
 # -------------------------------------------------

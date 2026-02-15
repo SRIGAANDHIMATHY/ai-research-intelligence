@@ -1,3 +1,4 @@
+.env
 # Virtual Environment
 venv/
 paperbot/
