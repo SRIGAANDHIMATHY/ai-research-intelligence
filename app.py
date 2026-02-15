@@ -6,9 +6,6 @@ import re
 from pypdf import PdfReader
 from sentence_transformers import SentenceTransformer
 
-# -------------------------------------------------
-# PAGE CONFIG
-# -------------------------------------------------
 st.set_page_config(
     page_title="Lightweight AI Learning Assistant",
     layout="wide",
@@ -18,34 +15,20 @@ st.set_page_config(
 st.title("📘 Smart Learning Assistant")
 st.markdown("Upload study material and get structured explanations instantly.")
 
-# -------------------------------------------------
-# LOAD EMBEDDING MODEL (Lightweight)
-# -------------------------------------------------
 @st.cache_resource
 def load_model():
     return SentenceTransformer("all-MiniLM-L6-v2")
 
 model = load_model()
-
-# -------------------------------------------------
-# SESSION STATE
-# -------------------------------------------------
 if "vector_ready" not in st.session_state:
     st.session_state.vector_ready = False
 
 if "current_file" not in st.session_state:
     st.session_state.current_file = None
 
-# -------------------------------------------------
-# CLEAN TEXT
-# -------------------------------------------------
 def clean_text(text):
     text = re.sub(r'\s+', ' ', text)
     return text.strip()
-
-# -------------------------------------------------
-# EXTRACT TEXT
-# -------------------------------------------------
 def extract_text(pdf_path):
     reader = PdfReader(pdf_path)
     text = ""
@@ -55,9 +38,6 @@ def extract_text(pdf_path):
             text += content + "\n"
     return clean_text(text)
 
-# -------------------------------------------------
-# CHUNKING
-# -------------------------------------------------
 def chunk_text(text, chunk_size=300):
     words = text.split()
     chunks = []
@@ -67,9 +47,6 @@ def chunk_text(text, chunk_size=300):
             chunks.append(chunk)
     return chunks
 
-# -------------------------------------------------
-# BUILD VECTOR STORE
-# -------------------------------------------------
 @st.cache_resource(show_spinner=False)
 def build_vector_store(chunks):
     embeddings = model.encode(chunks)
@@ -80,10 +57,6 @@ def build_vector_store(chunks):
     index.add(embeddings)
 
     return index
-
-# -------------------------------------------------
-# RETRIEVE CONTEXT
-# -------------------------------------------------
 def retrieve_context(query, top_k=2):
     query_embedding = model.encode([query]).astype("float32")
     distances, indices = st.session_state.index.search(query_embedding, top_k)
@@ -95,9 +68,6 @@ def retrieve_context(query, top_k=2):
 
     return " ".join(selected_chunks)
 
-# -------------------------------------------------
-# SMART FORMATTER (NO LLM)
-# -------------------------------------------------
 def format_answer(query, context):
 
     sentences = re.split(r'(?<=[.!?]) +', context)
@@ -136,12 +106,7 @@ def format_answer(query, context):
 ## 🎓 Exam Insight
 Understanding this topic is important for conceptual clarity and exam-based questions.
 """
-
     return formatted
-
-# -------------------------------------------------
-# FILE UPLOAD
-# -------------------------------------------------
 uploaded_file = st.file_uploader("📄 Upload PDF", type=["pdf"])
 
 if uploaded_file:
