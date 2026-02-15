@@ -1,0 +1,13 @@
+# Virtual Environment
+venv/
+paperbot/
+__pycache__/
+
+# Temporary files
+temp.pdf
+*.pyc
+*.pyo
+
+# OS files
+.DS_Store
+Thumbs.db
